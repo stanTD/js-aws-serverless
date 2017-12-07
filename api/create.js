@@ -7,18 +7,15 @@ const _ = require('lodash');
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
-const helpers = require('./helpers.js');
-
 const getParams = () =>{
   return _.clone(
     {
       TableName: process.env.DYNAMODB_TABLE,
       Item: {
         id: uuid.v1(),
-        text: data.text,
-        checked: false,
-        createdAt: timestamp,
-        updatedAt: timestamp,
+        checked: false
+        //createdAt: timestamp,
+        //updatedAt: timestamp,
       },
     }
   );
@@ -27,26 +24,32 @@ const getParams = () =>{
 module.exports.create = (event, context, callback) => {
   const timestamp = new Date().getTime();
   const data = JSON.parse(event.body);
-  if (typeof data.text !== 'string') {
+
+/*   if (typeof data.text !== 'string') {
     console.error('Validation Failed');
     callback(null, {
       statusCode: 400,
       headers: { 'Content-Type': 'text/plain' },
       body: 'Couldn\'t add entry.',
+      headers: {
+        "Access-Control-Allow-Credentials": true,
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json",
+      }
     });
     return;
-  }
-
-
-  _.forOwn(data, (value, key) ={
-
-  })
+  } */
 
   const params = getParams();
 
+  console.log(data);
+
   _.forOwn(data, (value, key) => {
-    params[key] = value;
+    const item = params.Item;
+    item[key] = value;
   });
+
+  console.log(params);
 
   
   dynamoDb.put(params, (error) => {
@@ -57,6 +60,11 @@ module.exports.create = (event, context, callback) => {
         statusCode: error.statusCode || 501,
         headers: { 'Content-Type': 'text/plain' },
         body: 'Couldn\'t create the todo item.',
+        headers: {
+          "Access-Control-Allow-Credentials": true,
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "application/json",
+        }
       });
       return;
     }
@@ -65,6 +73,11 @@ module.exports.create = (event, context, callback) => {
     const response = {
       statusCode: 200,
       body: JSON.stringify(params.Item),
+      headers: {
+        "Access-Control-Allow-Credentials": true,
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json",
+      }
     };
 
     

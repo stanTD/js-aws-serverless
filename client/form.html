@@ -1,0 +1,46 @@
+
+
+<form action="/" id="inputForm">
+    <input type="text" name="testVal1" placeholder="Search...">
+    <input type="text" name="testVal222" placeholder="Search...">
+    <input type="submit" value="Search">
+  </form>
+  
+  <div id="result"></div>
+   
+   <script
+    src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g="
+    crossorigin="anonymous"></script>
+    
+  <script>
+  
+  
+  
+  $( "#inputForm" ).submit(( event ) => {
+      
+    const action = "https://14i6rxr1ni.execute-api.us-east-1.amazonaws.com/dev/api";
+   
+    // Stop form from submitting normally
+    event.preventDefault();
+    
+      const $form = $( this )
+        const term = $form.find( "input[name='testVal1']" ).val();
+    
+                  $.ajax({
+                      type: "POST",
+                      url: action,
+                      contentType: 'application/json',
+                      data: JSON.stringify({
+                          'name': "summmmthing"
+                      }),
+                      success: function(res){
+                          $('#form-response').text('Email was sent.');
+                      },
+                      error: function(){
+                          $('#form-response').text('Error.');
+                      }
+                  });
+  
+  });
+  </script>
