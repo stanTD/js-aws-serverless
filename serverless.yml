@@ -4,7 +4,7 @@ frameworkVersion: ">=1.1.0 <2.0.0"
 
 provider:
   name: aws
-  runtime: nodejs4.3
+  runtime: nodejs6.10
   environment:
     DYNAMODB_TABLE: ${self:service}-${opt:stage, self:provider.stage}
   iamRoleStatements:
@@ -20,15 +20,15 @@ provider:
 
 functions:
   create:
-    handler: todos/create.create
+    handler: api/create.create
     events:
       - http:
-          path: todos
+          path: api
           method: post
           cors: true
 
   list:
-    handler: todos/list.list
+    handler: api/list.list
     events:
       - http:
           path: todos
@@ -36,7 +36,7 @@ functions:
           cors: true
 
   get:
-    handler: todos/get.get
+    handler: api/get.get
     events:
       - http:
           path: todos/{id}
@@ -44,7 +44,7 @@ functions:
           cors: true
 
   update:
-    handler: todos/update.update
+    handler: api/update.update
     events:
       - http:
           path: todos/{id}
@@ -52,7 +52,7 @@ functions:
           cors: true
 
   delete:
-    handler: todos/delete.delete
+    handler: api/delete.delete
     events:
       - http:
           path: todos/{id}

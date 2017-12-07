@@ -3,9 +3,26 @@
 const uuid = require('uuid');
 const AWS = require('aws-sdk'); // eslint-disable-line import/no-extraneous-dependencies
 
+const _ = require('lodash');
+
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
-const helpers = requir('./helpers.js');
+const helpers = require('./helpers.js');
+
+const getParams = () =>{
+  return _.clone(
+    {
+      TableName: process.env.DYNAMODB_TABLE,
+      Item: {
+        id: uuid.v1(),
+        text: data.text,
+        checked: false,
+        createdAt: timestamp,
+        updatedAt: timestamp,
+      },
+    }
+  );
+}
 
 module.exports.create = (event, context, callback) => {
   const timestamp = new Date().getTime();
@@ -15,24 +32,23 @@ module.exports.create = (event, context, callback) => {
     callback(null, {
       statusCode: 400,
       headers: { 'Content-Type': 'text/plain' },
-      body: 'Couldn\'t create the todo item.',
+      body: 'Couldn\'t add entry.',
     });
     return;
   }
 
-  const params = {
-    TableName: process.env.DYNAMODB_TABLE,
-    Item: {
-      id: uuid.v1(),
-      text: data.text,
-      checked: false,
-      createdAt: timestamp,
-      updatedAt: timestamp,
-      sumthin: "yup"
-    },
-  };
 
-  // write the todo to the database
+  _.forOwn(data, (value, key) ={
+
+  })
+
+  const params = getParams();
+
+  _.forOwn(data, (value, key) => {
+    params[key] = value;
+  });
+
+  
   dynamoDb.put(params, (error) => {
     // handle potential errors
     if (error) {
@@ -50,6 +66,8 @@ module.exports.create = (event, context, callback) => {
       statusCode: 200,
       body: JSON.stringify(params.Item),
     };
+
+    
     callback(null, response);
   });
 };
