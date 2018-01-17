@@ -1,3 +1,10 @@
+# Note: 
+
+This was cloned from a tutorial AWS project, the documentation below is from that. The specific endpoint that has been changed is the /api/create.js file, which takes in a request from a webform and writes it to Dynamo DB. Code for an example form that submits this is located at /client/form.html
+
+
+The rest of this documentation is generic and could be out of date, but gives an overall feel for how this would be deployed using AWS Serverless: https://serverless.com/
+
 
 # Serverless REST API
 
